@@ -9,34 +9,45 @@ if [[ ! -f "$SOURCE" ]]; then
   exit 1
 fi
 
+# Firefox profile locations used by common Linux installations.
 BASE_DIRS=(
+  "$HOME/.config/mozilla/firefox"
   "$HOME/.mozilla/firefox"
+  "$HOME/.var/app/org.mozilla.firefox/.config/mozilla/firefox"
   "$HOME/.var/app/org.mozilla.firefox/.mozilla/firefox"
 )
 
 PROFILES=()
 
 for base in "${BASE_DIRS[@]}"; do
-  [[ -f "$base/profiles.ini" ]] || continue
+  [[ -d "$base" ]] || continue
 
-  while IFS= read -r profile; do
-    [[ -n "$profile" ]] && PROFILES+=("$profile")
-  done < <(
-    awk -F= -v base="$base" '
-      /^Path=/ {
-        path=$2
-        if (path ~ /^\//) print path
-        else print base "/" path
-      }
-    ' "$base/profiles.ini"
-  )
+  # Prefer profiles.ini when available.
+  if [[ -f "$base/profiles.ini" ]]; then
+    while IFS= read -r profile; do
+      [[ -n "$profile" ]] && PROFILES+=("$profile")
+    done < <(
+      awk -F= -v base="$base" '
+        /^Path=/ {
+          path=$2
+          if (path ~ /^\//) print path
+          else print base "/" path
+        }
+      ' "$base/profiles.ini"
+    )
+  fi
+
+  # Fallback: detect actual Firefox profiles by prefs.js.
+  while IFS= read -r prefs; do
+    PROFILES+=("$(dirname "$prefs")")
+  done < <(find "$base" -maxdepth 2 -type f -name 'prefs.js' 2>/dev/null)
 done
 
 mapfile -t PROFILES < <(printf '%s\n' "${PROFILES[@]}" | awk 'NF && !seen[$0]++')
 
 if (( ${#PROFILES[@]} == 0 )); then
   echo "No Firefox profiles found."
-  echo "Open Firefox once, close it, then run this installer again."
+  echo "Start Firefox once, then close it and run this installer again."
   exit 1
 fi
 
