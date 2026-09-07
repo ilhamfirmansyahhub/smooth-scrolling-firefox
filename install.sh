@@ -9,17 +9,50 @@ if [[ ! -f "$SOURCE" ]]; then
   exit 1
 fi
 
-mapfile -t PROFILES < <(find "$HOME/.mozilla/firefox" "$HOME/.var/app/org.mozilla.firefox/.mozilla/firefox" -maxdepth 2 -type d -name '*.default*' 2>/dev/null | sort -u)
+BASE_DIRS=(
+  "$HOME/.mozilla/firefox"
+  "$HOME/.var/app/org.mozilla.firefox/.mozilla/firefox"
+)
+
+PROFILES=()
+
+for base in "${BASE_DIRS[@]}"; do
+  [[ -f "$base/profiles.ini" ]] || continue
+
+  while IFS= read -r profile; do
+    [[ -n "$profile" ]] && PROFILES+=("$profile")
+  done < <(
+    awk -F= -v base="$base" '
+      /^Path=/ {
+        path=$2
+        if (path ~ /^\//) print path
+        else print base "/" path
+      }
+    ' "$base/profiles.ini"
+  )
+done
+
+mapfile -t PROFILES < <(printf '%s\n' "${PROFILES[@]}" | awk 'NF && !seen[$0]++')
 
 if (( ${#PROFILES[@]} == 0 )); then
-  echo "No Firefox profiles found. Start Firefox once, then run this installer again."
+  echo "No Firefox profiles found."
+  echo "Open Firefox once, close it, then run this installer again."
   exit 1
 fi
 
+INSTALLED=0
 for profile in "${PROFILES[@]}"; do
-  cp "$SOURCE" "$profile/user.js"
-  echo "Installed: $profile/user.js"
+  if [[ -d "$profile" ]]; then
+    cp "$SOURCE" "$profile/user.js"
+    echo "Installed: $profile/user.js"
+    INSTALLED=1
+  fi
 done
+
+if (( INSTALLED == 0 )); then
+  echo "No valid Firefox profile directories found."
+  exit 1
+fi
 
 echo
 echo "Firefox smooth scrolling preset installed."
