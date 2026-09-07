@@ -2,13 +2,9 @@
 
 A simple `user.js` preset for Firefox that enables smoother, more fluid scrolling with a Zen Browser-like feel.
 
-The included installer automatically detects Firefox profiles on Linux, including the standard profile location used by this setup:
-
-```text
-~/.config/mozilla/firefox/
-```
-
-It also supports common Mozilla and Flatpak Firefox profile locations.
+> [!NOTE]
+> **Tested on CachyOS (Arch Linux) with the native Firefox package.**
+> This project is intended for Linux Firefox installations and has been tested on an Arch-based system. Other Linux distributions may use different Firefox profile locations, but the installer includes several common locations and a `prefs.js` fallback.
 
 ## What You Get
 
@@ -22,6 +18,27 @@ This preset applies the following Firefox preferences:
 - Adjusted fling friction for a more natural momentum effect
 
 The goal is a smoother scrolling experience without having to open `about:config` and change each preference manually.
+
+## Compatibility
+
+### Tested
+
+- **CachyOS / Arch Linux**
+- Native Firefox package from the Arch Linux repositories
+- Standard Firefox profiles created automatically by Firefox
+
+### Profile locations supported by the installer
+
+The installer checks common Linux locations, including:
+
+```text
+~/.config/mozilla/firefox/
+~/.mozilla/firefox/
+~/.var/app/org.mozilla.firefox/.config/mozilla/firefox/
+~/.var/app/org.mozilla.firefox/.mozilla/firefox/
+```
+
+It also falls back to searching for `prefs.js`, so the profile does not need to use a specific profile name.
 
 ## Installation
 
@@ -94,11 +111,19 @@ chmod +x install.sh
 
 No manual `about:config` editing is required.
 
+## How It Works
+
+The project does not use a Firefox browser extension. Instead, it installs a `user.js` file into the Firefox profile. Firefox reads these preferences when starting the browser.
+
+The installer is designed to handle multiple profiles automatically. This means a normal Firefox installation with more than one profile can receive the preset without manually selecting a profile.
+
 ## Notes
 
 - Firefox must have created at least one profile before the installer can install the preset.
+- Close Firefox before running the installer so the profile is not being actively modified.
 - The installer supports multiple Firefox profiles and installs the preset into every detected profile.
 - This project is intended for Linux Firefox installations.
+- Preference names and behavior can vary between Firefox versions. If Mozilla changes or removes a preference, that setting may have no effect on newer versions.
 
 ## Author
 
