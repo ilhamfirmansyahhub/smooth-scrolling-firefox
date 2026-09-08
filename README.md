@@ -4,7 +4,7 @@ A simple `user.js` preset for Firefox that makes scrolling feel smoother and mor
 
 > [!NOTE]
 > **Tested on CachyOS (Arch Linux) with the native Firefox package.**
-> This project was originally made for my own Linux setup, but the `user.js` itself also works on Windows. Native installers are included for both platforms.
+> This project was originally made for my own Linux setup, but the `user.js` also works on Windows. Native installers are included for both platforms.
 
 ## Why I Made This
 
@@ -14,7 +14,7 @@ After trying different Firefox `about:config` preferences, I found a combination
 
 The annoying part was having to change all those preferences manually every time I installed Firefox again.
 
-So I turned the settings into a small preset with an installer.
+So I turned the settings into a small preset with installers for Linux and Windows.
 
 The idea is simple:
 
@@ -58,7 +58,7 @@ It also falls back to searching for `prefs.js`, so the profile does not need to 
 
 ### Windows
 
-The Windows installer checks the standard Firefox profile locations under:
+The Windows installer checks common Firefox profile locations under:
 
 ```text
 %APPDATA%\Mozilla\Firefox\Profiles\
@@ -68,7 +68,7 @@ The Windows installer checks the standard Firefox profile locations under:
 It detects profiles by looking for `prefs.js`, so you do not need to know the profile name.
 
 > [!NOTE]
-> The preset is intended for Firefox on Linux and Windows. The included native installers are currently tested on CachyOS/Arch Linux and designed for standard Windows Firefox profile locations. Other Firefox packaging methods may use different profile paths.
+> The preset is intended for Firefox on Linux and Windows. The Linux installer has been tested on CachyOS/Arch Linux. The Windows installer is designed for standard Windows Firefox profile locations, but Windows-specific behavior has not been tested by the project maintainer yet.
 
 ## Installation — Linux
 
@@ -114,7 +114,7 @@ git clone https://github.com/ilhamfirmansyahhub/smooth-scrolling-firefox.git
 cd smooth-scrolling-firefox
 ```
 
-Then run:
+Then run PowerShell:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
@@ -207,7 +207,7 @@ The installers automatically detect Firefox profiles instead of relying on a spe
 
 - Firefox must have created at least one profile before the installer can install the preset.
 - Close Firefox before running the installer so the profile is not actively being modified.
-- The installer supports multiple Firefox profiles and installs the preset into every detected profile.
+- The installers support multiple Firefox profiles and install the preset into every detected profile.
 - Preference names and behavior can vary between Firefox versions. If Mozilla changes or removes a preference, that setting may have no effect on newer versions.
 - This preset changes Firefox preferences; it does not modify Firefox binaries or install a browser extension.
 
