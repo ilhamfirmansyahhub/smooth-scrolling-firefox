@@ -1,25 +1,27 @@
-// Firefox Smooth Scrolling — Smooth + Lightweight preset
+// Firefox Smooth Scrolling — Zen-like preset
 // Managed by: ilhamfirmansyahhub/smooth-scrolling-firefox
+// Based on the Zen Smooth Scrolling option from Betterfox Smoothfox.
 
-// Enable smooth mouse-wheel scrolling.
+// Enable Firefox smooth scrolling.
 user_pref("general.smoothScroll", true);
-user_pref("general.smoothScroll.mouseWheel", true);
 
-// Balanced animation: smooth without feeling slow or heavy.
-user_pref("general.smoothScroll.mouseWheel.durationMaxMS", 320);
-user_pref("general.smoothScroll.mouseWheel.durationMinMS", 90);
+// Enable Firefox's smooth scrolling physics.
+user_pref("general.smoothScroll.msdPhysics.enabled", true);
 
-// Smaller wheel steps for controlled movement.
-user_pref("mousewheel.min_line_scroll_amount", 10);
-
-// Blend consecutive wheel input for a more fluid feel.
+// Blend wheel input for a smoother, more continuous feel.
 user_pref("general.smoothScroll.currentVelocityWeighting", "0.15");
 user_pref("general.smoothScroll.stopDecelerationWeighting", "0.6");
 
-// Keep Firefox's native fling/momentum and overscroll behavior.
-user_pref("apz.fling.enabled", true);
-user_pref("apz.overscroll.enabled", true);
+// Keep wheel steps small and responsive.
+user_pref("mousewheel.min_line_scroll_amount", 10);
+user_pref("general.smoothScroll.mouseWheel.durationMinMS", 80);
 
-// Light momentum tuning.
-user_pref("apz.fling_friction", 0.002);
-user_pref("apz.fling_stopped_threshold", 0.0);
+// Smoothing/physics tuned for a Zen-like feel.
+user_pref("general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS", 12);
+user_pref("general.smoothScroll.msdPhysics.motionBeginSpringConstant", 600);
+user_pref("general.smoothScroll.msdPhysics.regularSpringConstant", 650);
+user_pref("general.smoothScroll.msdPhysics.slowdownMinDeltaMS", 25);
+user_pref("general.smoothScroll.msdPhysics.slowdownSpringConstant", 250);
+
+// Keep overscroll enabled.
+user_pref("apz.overscroll.enabled", true);
